@@ -6,7 +6,11 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "cy:open": "cypress open --e2e",
+    "cy:run": "cypress run --e2e",
+    "e2e": "start-server-and-test dev http://localhost:3000 cy:open",
+    "e2e:headless": "start-server-and-test dev http://localhost:3000 cy:run"
   },
   "dependencies": {
     "@trivago/prettier-plugin-sort-imports": "^5.2.2",
@@ -21,6 +25,7 @@
     "prettier-plugin-tailwindcss": "^0.6.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "start-server-and-test": "^2.0.11",
     "tailwind-merge": "^3.2.0",
     "zod": "^3.24.3"
   },
@@ -33,7 +38,9 @@
     "cypress": "^14.3.2",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "eslint-plugin-cypress": "^4.3.0",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@3.3.1+sha512.e355f587284d06d2c0c1c2259c68746aa1f1f6cdeedefce543cec206709beeb7951c0a27cdbfb7b5736a576854829af9c660bbe82052192c49f108a546994b71"
 }

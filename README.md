@@ -21,3 +21,5 @@ bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+Deployed to [https://test-auth-demo.vercel.app](https://test-auth-demo.vercel.app).

@@ -1,10 +1,11 @@
 'use client';
 
 import { useFormik } from 'formik';
+import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
 import { z } from 'zod';
 
-import { users } from '@/shared/data.json';
+import DATA from '@/shared/data.json';
 import { cn } from '@/shared/lib/utils';
 import { Input, InputPassword } from '@/shared/ui/Input';
 import { useToasts } from '@/shared/ui/Toast';
@@ -32,63 +33,66 @@ export function LoginForm({
   onLogin: LoginFormSuccessFunction;
 }) {
   const { notify } = useToasts();
+  const router = useRouter();
   const emailInputRef = useRef<HTMLInputElement>(null);
   const passwordInputRef = useRef<HTMLInputElement>(null);
-  const form = useFormik({
-    validate(values) {
-      const validation = LoginFormSchema.safeParse(values);
 
+  const form = useFormik({
+    initialValues: {
+      email: '',
+      password: '',
+    },
+    validateOnChange: true,
+    validateOnBlur: true,
+    validate: (values) => {
+      const validation = LoginFormSchema.safeParse(values);
       if (!validation.success) {
         return validation.error.errors.reduce((result: Record<string, string>, error) => {
           result[String(error.path[0])] = error.message;
           return result;
         }, {});
       }
-    },
-    initialValues: {
-      email: '',
-      password: '',
+      return {};
     },
     onSubmit: async (values) => {
       try {
-        await onLogin(values);
+        const result = await onLogin(values);
+
+        if (result.error) {
+          notify?.({
+            title: 'Login Error',
+            content: result.error,
+            variant: 'danger',
+          });
+          return;
+        }
+
         notify?.({
           content: 'You logged in successfully',
           variant: 'success',
         });
+
+        router.push('/');
+        router.refresh();
       } catch (e) {
-        console.log('Invalid credentials', e);
-        handleNotifyInvalidCredentials();
+        console.error('Login error:', e);
+        notify?.({
+          title: 'Login Error',
+          content: 'An unexpected error occurred',
+          variant: 'danger',
+        });
       }
     },
   });
 
-  const handleFillDemo = async () => {
-    await form.setFieldValue('email', users[0].email);
-    await form.setFieldValue('password', users[0].password);
-    if (emailInputRef.current) emailInputRef.current.value = users[0].email;
-    if (passwordInputRef.current) passwordInputRef.current.value = users[0].password;
-  };
-
-  const handleSubmitFormByEnter = async (event: React.KeyboardEvent) => {
-    if (event.key === 'Enter') {
-      if (!form.isValid) {
-        handleNotifyInvalidCredentials();
-        return;
-      }
-
-      event.preventDefault();
-      form.handleSubmit();
-    }
-  };
-
-  const handleNotifyInvalidCredentials = (event?: React.FormEvent) => {
-    event?.preventDefault();
-    notify?.({
-      title: 'Login Error',
-      content: 'Please enter a valid email and password',
-      variant: 'danger',
-    });
+  const handleFillDemo = () => {
+    form.setValues(
+      {
+        email: DATA.users[0].email,
+        password: DATA.users[0].password,
+      },
+      true
+    ); // validateForm: true
   };
 
   return (
@@ -97,8 +101,7 @@ export function LoginForm({
       aria-label="Login form"
       className={cn('flex flex-col gap-2', className)}
       role="form"
-      onKeyDown={handleSubmitFormByEnter}
-      onSubmit={form.isValid ? form.handleSubmit : handleNotifyInvalidCredentials}>
+      onSubmit={form.handleSubmit}>
       <div className="mb-4">
         <p id="login-popup-description">Please enter your email and password to login</p>
         <p className="text-sm opacity-50 select-none">
@@ -123,6 +126,7 @@ export function LoginForm({
         placeholder="Email"
         ref={emailInputRef}
         type="email"
+        value={form.values.email}
         onBlur={form.handleBlur}
         onChange={form.handleChange}
       />
@@ -134,20 +138,19 @@ export function LoginForm({
         name="password"
         placeholder="Password"
         ref={passwordInputRef}
+        value={form.values.password}
         onBlur={form.handleBlur}
         onChange={form.handleChange}
       />
 
       <Button
-        aria-label={form.isValid ? 'Submit login form' : 'Login form has errors'}
+        aria-label="Submit login form"
         className="mt-8"
-        // disabled={!form.isValid}
+        disabled={!form.isValid || form.isSubmitting}
         type="submit"
         variant={form.isValid ? 'success' : 'danger'}>
-        Login
+        {form.isSubmitting ? 'Logging in...' : 'Login'}
       </Button>
     </form>
   );
 }
-
-export default LoginForm;

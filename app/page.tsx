@@ -1,12 +1,10 @@
-import { redirect } from 'next/navigation';
-
 import Button from '@/shared/ui/Button';
 
 import { auth, signOut } from '@/auth';
 
 const handleLogout = async () => {
   'use server';
-  await signOut();
+  return await signOut();
 };
 
 export default async function Home() {
@@ -33,12 +31,7 @@ export default async function Home() {
         </>
       )}
       {!session && (
-        <Button
-          aria-label="Go to login page"
-          onClick={async () => {
-            'use server';
-            redirect('/login');
-          }}>
+        <Button aria-label="Go to login page" href="/login">
           Login
         </Button>
       )}

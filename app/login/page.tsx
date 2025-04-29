@@ -1,25 +1,29 @@
-import { redirect } from 'next/navigation';
+'use client';
+
+import { signIn } from 'next-auth/react';
 
 import { LoginForm } from '@/shared/ui/Login';
 
-import { auth, signIn } from '@/auth';
-
 const handleLogin = async (values: any) => {
-  'use server';
-  await signIn('credentials', {
-    email: values.email,
-    password: values.password,
-    redirectTo: '/',
-  });
+  try {
+    const result = await signIn('credentials', {
+      email: values.email,
+      password: values.password,
+      redirect: false,
+    });
+
+    if (!result?.ok || result?.error) {
+      return { error: 'Invalid credentials' };
+    }
+
+    return { success: true };
+  } catch (error) {
+    console.error('Login error:', error);
+    return { error: 'An unexpected error occurred', success: false };
+  }
 };
 
-export const LoginPage = async () => {
-  const session = await auth();
-
-  if (session?.user) {
-    redirect('/');
-  }
-
+export default function LoginPage() {
   return (
     <div
       aria-labelledby="login-title"
@@ -30,6 +34,4 @@ export const LoginPage = async () => {
       <LoginForm className="w-80" onLogin={handleLogin} />
     </div>
   );
-};
-
-export default LoginPage;
+}
