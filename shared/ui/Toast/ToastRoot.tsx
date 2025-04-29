@@ -1,6 +1,5 @@
 'use client';
 
-// import { TransitionGroup } from 'react-transition-group';
 import { cn } from '@/shared/lib/utils';
 
 import type { ToastProps } from './Toast';
@@ -15,7 +14,6 @@ export function ToastRoot({
   items: ToastProps[];
   position?: ToastPosition;
 }) {
-  // TODO: accessibility for Toasts
   return (
     <div
       className={cn(
@@ -25,11 +23,9 @@ export function ToastRoot({
         position === 'top-left' && 'top-0 left-0',
         position === 'bottom-left' && 'bottom-0 left-0'
       )}>
-      {/* <TransitionGroup enter exit component={null}> */}
       {items.map((item) => (
         <Toast key={item.id} {...item} />
       ))}
-      {/* </TransitionGroup> */}
     </div>
   );
 }

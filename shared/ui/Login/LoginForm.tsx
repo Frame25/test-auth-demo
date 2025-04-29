@@ -58,11 +58,7 @@ export function LoginForm({
         });
       } catch (e) {
         console.log('Invalid credentials', e);
-        notify?.({
-          title: 'Login Error',
-          content: 'Please enter a valid email and password',
-          variant: 'danger',
-        });
+        handleNotifyInvalidCredentials();
       }
     },
   });
@@ -74,19 +70,47 @@ export function LoginForm({
     if (passwordInputRef.current) passwordInputRef.current.value = users[0].password;
   };
 
+  const handleSubmitFormByEnter = async (event: React.KeyboardEvent) => {
+    if (event.key === 'Enter') {
+      if (!form.isValid) {
+        handleNotifyInvalidCredentials();
+        return;
+      }
+
+      event.preventDefault();
+      form.handleSubmit();
+    }
+  };
+
+  const handleNotifyInvalidCredentials = (event?: React.FormEvent) => {
+    event?.preventDefault();
+    notify?.({
+      title: 'Login Error',
+      content: 'Please enter a valid email and password',
+      variant: 'danger',
+    });
+  };
+
   return (
-    <form className={cn('flex flex-col gap-2', className)} role="form">
+    <form
+      aria-describedby="login-popup-description"
+      aria-label="Login form"
+      className={cn('flex flex-col gap-2', className)}
+      role="form"
+      onKeyDown={handleSubmitFormByEnter}
+      onSubmit={form.isValid ? form.handleSubmit : handleNotifyInvalidCredentials}>
       <div className="mb-4">
         <p id="login-popup-description">Please enter your email and password to login</p>
         <p className="text-sm opacity-50 select-none">
           You can click{' '}
           <button
+            aria-label="Fill form with demo credentials"
             className="cursor-pointer font-bold text-sky-500"
             type="button"
             onClick={handleFillDemo}>
             here
           </button>{' '}
-          to fill form with demo credetntials
+          to fill form with demo credentials
         </p>
       </div>
       <Input
@@ -115,11 +139,11 @@ export function LoginForm({
       />
 
       <Button
+        aria-label={form.isValid ? 'Submit login form' : 'Login form has errors'}
         className="mt-8"
-        disabled={!form.isValid}
+        // disabled={!form.isValid}
         type="submit"
-        variant={form.isValid ? 'success' : 'danger'}
-        onClick={form.handleSubmit}>
+        variant={form.isValid ? 'success' : 'danger'}>
         Login
       </Button>
     </form>

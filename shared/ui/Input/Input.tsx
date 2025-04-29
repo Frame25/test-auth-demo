@@ -51,7 +51,7 @@ export function Input({
         {after}
       </div>
       {error && (
-        <p className="text-sm text-red-500" id={id + '-error'} role="alert">
+        <p aria-live="polite" className="text-sm text-red-500" id={id + '-error'} role="alert">
           {error}
         </p>
       )}

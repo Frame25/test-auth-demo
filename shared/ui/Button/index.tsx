@@ -9,6 +9,7 @@ export function Button({
   variant = 'default',
   size = 'md',
   onClick,
+  ...props
 }: Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
   children: React.ReactNode;
   className?: string;
@@ -48,7 +49,8 @@ export function Button({
         size === 'lg' && 'px-6 py-3',
         className
       )}
-      onClick={onClick}>
+      onClick={onClick}
+      {...props}>
       {children}
     </button>
   );

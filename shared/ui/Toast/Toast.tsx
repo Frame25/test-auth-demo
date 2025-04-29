@@ -41,16 +41,22 @@ export function Toast({
 
   return (
     <div
-      data-id={id}
+      aria-atomic="true"
+      aria-describedby={`toast-${id}-description`}
+      aria-live="polite"
+      role="alert"
       className={cn(
-        'pointer-events-auto relative flex max-w-sm flex-col gap-2 overflow-hidden rounded-lg p-2',
+        'animate-appear pointer-events-auto relative flex max-w-sm flex-col gap-2 overflow-hidden rounded-lg p-2',
         variantClass,
         className
       )}>
       <div className="text-sm font-semibold">{title}</div>
-      <div className="text-sm">{content}</div>
+      <div className="text-sm" id={`toast-${id}-description`}>
+        {content}
+      </div>
       {Boolean(closable || !timeout) && (
         <button
+          aria-label="Close notification"
           className="pointer-events-auto absolute top-0 right-0 z-10 cursor-pointer rounded-bl-lg bg-black/50 p-2 transition duration-500 hover:bg-black/70"
           type="button"
           onClick={handleClose}>

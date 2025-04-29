@@ -14,12 +14,7 @@ export function LoginPopup({ onLogin }: { onLogin: LoginFormSuccessFunction }) {
       <Button variant="secondary" onClick={toggle}>
         Login
       </Button>
-      <Popup
-        aria-describedby="login-popup-description"
-        aria-label="Login"
-        title="Login"
-        visible={isOpen}
-        onClose={() => setIsOpen(false)}>
+      <Popup title="Login" visible={isOpen} onClose={() => setIsOpen(false)}>
         <LoginForm onLogin={onLogin} />
       </Popup>
     </>

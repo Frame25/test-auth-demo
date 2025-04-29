@@ -21,7 +21,12 @@ export const LoginPage = async () => {
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-8 p-8 pb-20 sm:p-20">
+    <div
+      aria-labelledby="login-title"
+      className="flex min-h-screen flex-col items-center justify-center gap-8 p-8 pb-20 sm:p-20">
+      <h1 className="text-2xl font-bold" id="login-title">
+        Login
+      </h1>
       <LoginForm className="w-80" onLogin={handleLogin} />
     </div>
   );
