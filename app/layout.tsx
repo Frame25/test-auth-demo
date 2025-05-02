@@ -29,8 +29,20 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        {/* Skip link for keyboard users */}
+        <a
+          className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-white focus:px-4 focus:py-2 focus:text-black focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:outline-none"
+          href="#main-content">
+          Skip to main content
+        </a>
+
         <ToastProvider>
-          <PopupProvider>{children}</PopupProvider>
+          <PopupProvider>
+            <header>{/* Add header content here */}</header>
+            <nav>{/* Add navigation content here */}</nav>
+            <main id="main-content">{children}</main>
+            <footer>{/* Add footer content here */}</footer>
+          </PopupProvider>
         </ToastProvider>
       </body>
     </html>

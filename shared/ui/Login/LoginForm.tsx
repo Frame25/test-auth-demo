@@ -92,23 +92,31 @@ export function LoginForm({
         password: DATA.users[0].password,
       },
       true
-    ); // validateForm: true
+    );
+    // Focus on the submit button after filling demo data for better keyboard navigation
+    setTimeout(() => {
+      const submitButton = document.querySelector('button[type="submit"]');
+      if (submitButton) {
+        (submitButton as HTMLButtonElement).focus();
+      }
+    }, 0);
   };
 
   return (
     <form
-      aria-describedby="login-popup-description"
-      aria-label="Login form"
+      aria-labelledby="login-form-title"
       className={cn('flex flex-col gap-2', className)}
-      role="form"
       onSubmit={form.handleSubmit}>
       <div className="mb-4">
+        <h2 className="mb-2 text-lg font-semibold" id="login-form-title">
+          Login Form
+        </h2>
         <p id="login-popup-description">Please enter your email and password to login</p>
         <p className="text-sm opacity-50 select-none">
           You can click{' '}
           <button
             aria-label="Fill form with demo credentials"
-            className="cursor-pointer font-bold text-sky-500"
+            className="cursor-pointer rounded px-1 font-bold text-sky-500 hover:underline focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 focus:outline-none"
             type="button"
             onClick={handleFillDemo}>
             here
@@ -144,8 +152,7 @@ export function LoginForm({
       />
 
       <Button
-        aria-label="Submit login form"
-        className="mt-8"
+        className="mt-8 focus:ring-2 focus:ring-offset-2 focus:outline-none"
         disabled={!form.isValid || form.isSubmitting}
         type="submit"
         variant={form.isValid ? 'success' : 'danger'}>

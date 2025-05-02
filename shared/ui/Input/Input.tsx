@@ -39,9 +39,9 @@ export function Input({
         <input
           aria-describedby={error ? id + '-error' : undefined}
           aria-invalid={!!error}
-          aria-label={label}
-          aria-required={required}
+          {...(!label && { 'aria-label': props.placeholder || '' })}
           id={id}
+          required={required}
           className={cn(
             'bg-background text-foreground placeholder:text-foreground/50 w-full',
             classNames?.input
@@ -51,7 +51,7 @@ export function Input({
         {after}
       </div>
       {error && (
-        <p aria-live="polite" className="text-sm text-red-500" id={id + '-error'} role="alert">
+        <p aria-live="assertive" className="text-sm text-red-500" id={id + '-error'} role="alert">
           {error}
         </p>
       )}

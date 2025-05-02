@@ -11,7 +11,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <main
+    <div
       aria-labelledby="page-title"
       className="flex min-h-screen flex-col items-center justify-center gap-8 p-8 pb-20 sm:p-20">
       <h1 className="text-2xl font-bold" id="page-title">
@@ -35,6 +35,6 @@ export default async function Home() {
           Login
         </Button>
       )}
-    </main>
+    </div>
   );
 }
