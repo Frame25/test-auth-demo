@@ -96,10 +96,10 @@ export function Popup({
 
   useEffect(() => {
     if (visible) {
-      // TODO: Hide other content from screen readers
-      // document.body?.setAttribute('aria-hidden', 'true');
+      // Hide other content from screen readers while popup is open
+      document.body?.setAttribute('aria-hidden', 'true');
       return () => {
-        // document.body?.removeAttribute('aria-hidden');
+        document.body?.removeAttribute('aria-hidden');
       };
     }
   }, [visible]);
